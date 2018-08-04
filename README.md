@@ -1,5 +1,5 @@
 # Description
-`tiny-multi-select` is a [Vue 2.0](https://vuejs.org) plugin that allows you to select multiple values, much like [`vue-multiselect`](https://github.com/shentao/vue-multiselect). Right now it's in development stage. Still needs to update lot many things.
+`tiny-multi-select` is a [Vue 2.0](https://vuejs.org) plugin that allows you to select multiple values, much like [`vue-multiselect`](https://github.com/shentao/vue-multiselect). Right now it's in development stage. Still needs to update lot many things. Find the npm package [link].(https://www.npmjs.com/package/tiny-multi-select)
 
 # Install and basic usage
 
