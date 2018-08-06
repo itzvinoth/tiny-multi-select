@@ -1,6 +1,6 @@
 {
   "name": "tiny-multi-select",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Vue.js component with simple multi select",
   "author": "htoniv <vinoth.vinothrenga@gmail.com>",
   "private": false,
@@ -13,7 +13,7 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/vinothkumarrenganathan/multi-select"
+    "url": "https://github.com/vinothkumarrenganathan/tiny-multi-select"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
