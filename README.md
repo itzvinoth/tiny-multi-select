@@ -20,28 +20,28 @@ $ npm install tiny-multi-select
 <script>
 import MultiSelect from 'tiny-multi-select'
 export default {
-	components: {
-		MultiSelect
-	},
-	data () {
-		return {
-		  options: [
-		    { name: 'AF', label: 'Afghanistan' },
+  components: {
+    MultiSelect
+  },
+  data() {
+    return {
+      options: [
+      	{ name: 'AF', label: 'Afghanistan' },
         { name: 'BS', label: 'Bahamas' },
         { name: 'FR', label: 'France' },
         { name: 'IN', label: 'India' },
-        { name: 'MC', label: 'Monaco' }, 
+        { name: 'MC', label: 'Monaco' },
         { name: 'MN', label: 'Mongolia' },
         { name: 'MV', label: 'Maldives' },
         { name: 'PL', label: 'Poland' },
         { name: 'SG', label: 'Singapore' },
-        { name: 'GB', label: 'United Kingdom' }, 
+        { name: 'GB', label: 'United Kingdom' },
         { name: 'US', label: 'United States' }
-		  ],
-		  // set with initial selected values as like this [{ name: 'PL', label: 'Poland' }]
-		  selectedValues: []
-		}
-	}
+      ],
+      // set with initial selected values as like this [{ name: 'PL', label: 'Poland' }]
+      selectedValues: []
+    }
+  }
 }
 </script>
 ```
