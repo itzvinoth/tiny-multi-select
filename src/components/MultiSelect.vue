@@ -10,7 +10,7 @@
 		</ul>
   	</div>
   	<ul v-show="showLabels" class="selection-labels" id="labels" :style="labelsStyle">
-      <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data.label }} </li>
+      <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data[label] }} </li>
     </ul>
   </div>
 </template>
