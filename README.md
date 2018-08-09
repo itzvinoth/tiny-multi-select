@@ -12,8 +12,8 @@ $ npm install tiny-multi-select
 
 ```
 <template>
-	<div>
-	  <multi-select :options="options" v-model="selectedValues" :selected-values="selectedValues" :multiple="true" width="350" track-by="name" label="label" ></multi-select>
+  <div>
+    <multi-select :options="options" v-model="selectedValues" :selected-values="selectedValues" :multiple="true" width="350" track-by="name" label="label"></multi-select>
   </div>
 </template>
 
