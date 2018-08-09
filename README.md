@@ -26,16 +26,20 @@ export default {
 	data () {
 		return {
 		  options: [
-		    { name: 'vuejs', label: 'Vue.js' },
-		    { name: 'adonis', label: 'Adonis' },
-		    { name: 'rails', label: 'Rails' },
-		    { name: 'sinatra', label: 'Sinatra' },
-		    { name: 'laravel', label: 'Laravel' },
-		    { name: 'phoenix', label: 'Phoenix' }
+		    { name: 'AF', label: 'Afghanistan' },
+        { name: 'BS', label: 'Bahamas' },
+        { name: 'FR', label: 'France' },
+        { name: 'IN', label: 'India' },
+        { name: 'MC', label: 'Monaco' }, 
+        { name: 'MN', label: 'Mongolia' },
+        { name: 'MV', label: 'Maldives' },
+        { name: 'PL', label: 'Poland' },
+        { name: 'SG', label: 'Singapore' },
+        { name: 'GB', label: 'United Kingdom' }, 
+        { name: 'US', label: 'United States' }
 		  ],
-		  // set with initial selected values as like this [{ name: 'rails', label: 'Rails' }]
+		  // set with initial selected values as like this [{ name: 'PL', label: 'Poland' }]
 		  selectedValues: []
-
 		}
 	}
 }
