@@ -10,6 +10,48 @@ Find the npm package [`link`](https://www.npmjs.com/package/tiny-multi-select)
 $ npm install tiny-multi-select
 ```
 
+### For single select
+```
+<template>
+  <div>
+    <multi-select :options="options" s-value="sValue" @clicked="onDropDownClick" :multiple="false" width="350" track-by="name" label="label"></multi-select>
+  </div>
+</template>
+
+<script>
+import MultiSelect from 'tiny-multi-select'
+export default {
+  components: {
+    MultiSelect
+  },
+  data() {
+    return {
+      options: [
+      	{ name: 'AF', label: 'Afghanistan' },
+        { name: 'BS', label: 'Bahamas' },
+        { name: 'FR', label: 'France' },
+        { name: 'IN', label: 'India' },
+        { name: 'MC', label: 'Monaco' },
+        { name: 'MN', label: 'Mongolia' },
+        { name: 'MV', label: 'Maldives' },
+        { name: 'PL', label: 'Poland' },
+        { name: 'SG', label: 'Singapore' },
+        { name: 'GB', label: 'United Kingdom' },
+        { name: 'US', label: 'United States' }
+      ],
+      sValue: {}
+    }
+  },
+  methods: {
+    onDropDownClick (value) {
+      this.sValue = value
+    }
+  }
+}
+</script>
+```
+
+### For multiple select
 ```
 <template>
   <div>

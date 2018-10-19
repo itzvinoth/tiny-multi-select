@@ -1,18 +1,24 @@
 <template>
-  <div :style="containerStyle" class="multiselect">
-  	<p v-show="false"> {{ currItem }}</p>
-  	<div id="inputDiv" :style="inputStyle" @click="keyCapture($event)">
-  		<ul class="choice-list">
-			<li class="choice" v-for="(data, index) in selectedValues"> {{ data[label] }} <span class="close" @click="clearItem($event, data)">&times;</span></li>
-			<li class="choice">
-				<input type="text" class="search" ref="listSearch" v-model="keywords" @focus="onFocus" @keydown="keyMonitor"></input>
-			</li>
-		</ul>
-  	</div>
-  	<ul v-show="showLabels" class="selection-labels" id="labels" :style="labelsStyle">
-      <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data[label] }} </li>
-    </ul>
-  </div>
+    <div :style="containerStyle" class="multiselect">
+        <p v-show="false"> {{ currItem }}</p>
+        <div class="multi-selection-container" :style="inputStyle" @click="keyCapture($event)" v-if="multiple">
+            <ul class="choice-list">
+                <li class="choice" v-for="data in selectedValues" :key="data.label"> 
+					{{ data[label] }} 
+					<span class="close" @click="clearItem($event, data)">&times;</span>
+				</li>
+                <li class="choice">
+                    <input type="text" class="search" ref="listSearch" v-model="keywords" @focus="onFocus" @keydown="keyMonitor"></input>
+                </li>
+            </ul>
+        </div>
+        <div class="single-selection-container" v-if="!multiple">
+            {{ selectedValue.label }}
+        </div>
+		<ul v-show="showLabels" class="selection-labels" id="labels" :style="labelStyle">
+            <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :key="data.name" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data.label }} </li>
+        </ul>
+    </div>
 </template>
 
 <script>
@@ -23,7 +29,8 @@ export default {
 			showLabels: false,
 			keywords: '',
 			currItem: 1,
-			divHeight: 0
+			divHeight: 0,
+			selectedValue: this.sValue,
 		}
 	},
 	props: {
@@ -33,7 +40,7 @@ export default {
 		},
 		multiple: {
 			type: Boolean,
-			required: false
+			required: true
 		},
 		trackBy: {
 			type: String,
@@ -51,12 +58,16 @@ export default {
 			type: [Object, Array],
 			required: false
 		},
+		sValue: {
+			type: [Object, Array, String],
+			required: false
+		},
 		placeHolder: {
 			type: String,
 			required: false
 		}
 	},
-	beforeMount: function() {
+	beforeMount () {
 		this.options.map((item, index) => {
 			item.navigate = false
 			item.itemId = index + 1
@@ -67,10 +78,10 @@ export default {
 			}
 		})
 	},
-	created: function () {
+	created () {
 		this.heightChange()
 	},
-	updated: function () {
+	updated () {
 		this.heightChange()
 	},
 	mounted () {
@@ -84,14 +95,14 @@ export default {
 		window.removeEventListener("click", this.checkElement)
 	},
 	methods: {
-		checkElement: function (event) {
+		checkElement (event) {
 			if (document.getElementsByClassName('multiselect')[0].contains(event.target)) {
 				this.showLabels = true
 			} else {
 				this.showLabels = false
 			}
 		},
-		keyMonitor: function(event) {
+		keyMonitor (event) {
 			if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122) || (event.keyCode == 8)) {
 				if (this.keywords.length <= 0 && event.keyCode == 8 && this.selectedValues.length > 0) {
 					for (var key in this.filteredOptions) {
@@ -109,16 +120,16 @@ export default {
 				})
 			}
 		},
-		heightChange: function () {
+		heightChange () {
 			let str = this.selectedValues.join()
 			this.divHeight = (Math.ceil((str.length+1) / 45)) * 40
 		},
-		keyCapture: function(event) {
+		keyCapture (event) {
 			this.$nextTick(() => {
 				this.$refs.listSearch.focus()
 			})
 		},
-		clearItem: function(event, selectedItem) {
+		clearItem (event, selectedItem) {
 			// Deselects or removes the element from the multi-select div when clicking the close button...
 			this.filteredOptions.map((item, index) => {
 				if (item[this.trackBy].indexOf(selectedItem[this.trackBy]) > -1) {
@@ -127,26 +138,49 @@ export default {
 				}
 			})
 		},
-		onFocus: function() {
+		onFocus () {
 			this.showLabels = true
 		},
-		onLabelClick: function(data, index) {
+		onLabelClick (data, index) {
 			// Selects or append the elements to the multi-select div when clicking on the list elements...
-			data.selected = !data.selected
-			// this.showLabels = true
-			this.keywords = ''
-			this.filteredOptions.map(item => {
-				if (item[this.trackBy].toLowerCase().indexOf(data[this.trackBy].toLowerCase()) > -1 && item.selected == true) {
-					let sValue = {}
-					sValue[this.trackBy] = item[this.trackBy]
-					sValue[this.label] = item[this.label]
-					this.selectedValues.push(sValue)
-				} else if (item[this.trackBy].toLowerCase().indexOf(data[this.trackBy].toLowerCase()) > -1 && item.selected == false) {
-					this.selectedValues.splice(this.selectedValues.map(sVal => sVal[this.trackBy]).indexOf(data[this.trackBy]), 1)
-				}
-			})
+			if (this.multiple) {
+				data.selected = !data.selected
+				// this.showLabels = true
+				this.keywords = ''
+				this.filteredOptions.map(item => {
+					if (item[this.trackBy].toLowerCase().indexOf(data[this.trackBy].toLowerCase()) > -1 && item.selected == true) {
+						let sValue = {}
+						sValue[this.trackBy] = item[this.trackBy]
+						sValue[this.label] = item[this.label]
+						this.selectedValues.push(sValue)
+					} else if (item[this.trackBy].toLowerCase().indexOf(data[this.trackBy].toLowerCase()) > -1 && item.selected == false) {
+						this.selectedValues.splice(this.selectedValues.map(sVal => sVal[this.trackBy]).indexOf(data[this.trackBy]), 1)
+					}
+				})
+			} else {
+				data.selected = true
+				// this.sValue = []
+				this.filteredOptions.forEach(item => {
+					if (item.name == data.name) {
+						let sValue = {}
+						sValue.label = item.label
+						sValue.name = item.name
+						this.selectedValue = sValue
+						this.$emit('clicked', sValue)
+					} else {
+						item.selected = false
+					}
+				})
+			}
 		},
-		navOnLabel: function () {
+		exitIfNotMultipleSelect () {
+			if (!this.multiple) {
+				return
+			}
+		},
+		navOnLabel () {
+			// No navigation for single select..
+			exitIfNotMultipleSelect()
 			// Naviate through label items on key up & down 
 			let getLabel = document.getElementById('labels')
 			if (event.keyCode == 38) {
@@ -174,39 +208,42 @@ export default {
 				}
 			})
 		},
-		enterPress: function () {
+		enterPress () {
+			// No enter key press for single select..
+			exitIfNotMultipleSelect()
 			// Select & Deselect Labels on keypress Enter  
 			if (event.keyCode == 13) {
-				if (this.filteredOptions[this.currItem - 1].selected == false) {
+				var filteredCurrentOption = this.filteredOptions[this.currItem - 1]
+				if (filteredCurrentOption.selected == false) {
 					let sValue = {}
-					this.filteredOptions[this.currItem - 1].selected = true
-					sValue[this.trackBy] = this.filteredOptions[this.currItem - 1][this.trackBy]
-					sValue[this.label] = this.filteredOptions[this.currItem - 1][this.label]
+					filteredCurrentOption.selected = true
+					sValue[this.trackBy] = filteredCurrentOption[this.trackBy]
+					sValue[this.label] = filteredCurrentOption[this.label]
 					this.selectedValues.push(sValue)
 					this.keywords = ''
 					// this.currItem = 1
 				} else {
-					this.selectedValues.splice(this.selectedValues.map(sVal => sVal[this.trackBy]).indexOf(this.filteredOptions[this.currItem - 1][this.trackBy]), 1)
-					this.filteredOptions[this.currItem - 1].selected = false
+					this.selectedValues.splice(this.selectedValues.map(sVal => sVal[this.trackBy]).indexOf(filteredCurrentOption[this.trackBy]), 1)
+					filteredCurrentOption.selected = false
 				}
 			}
 		}
 	},
 	computed: {
 		// Filter Lists based upon search 
-		filteredOptions: function() {
+		filteredOptions () {
 			return this.options.filter(item => {
-				return item[this.trackBy].toLowerCase().indexOf(this.keywords.toLowerCase()) > -1
+				return item.label.toLowerCase().indexOf(this.keywords.toLowerCase()) > -1
 			})
-		},	
+		},
 		// Conditional style rendering
-		containerStyle: function () {
+		containerStyle () {
 			return { width: (this.width !== undefined ? this.width+'px': '300px') }
 		},
-		inputStyle: function () {
+		inputStyle () {
 			return { height: this.divHeight+'px' }
 		},
-		labelsStyle: function () {
+		labelStyle () {
 			return { position: 'absolute', width: (this.width !== undefined ? this.width+'px': '300px') }
 		}
 	}
@@ -214,8 +251,21 @@ export default {
 </script>
 
 <style>
-#inputDiv {
+.multi-selection-container {
   border: 1px solid #CCC;
+  width: 100%;
+}
+.single-selection-container {
+  border: 1px solid #CCC;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  color: #827e7e;
+}
+#inputDivSS {
+  border: 1px solid #CCC;
+  height: 40px;
   width: 100%;
 }
 .selected {
