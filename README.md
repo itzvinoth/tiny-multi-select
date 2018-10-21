@@ -55,7 +55,7 @@ export default {
 ```
 <template>
   <div>
-    <multi-select :options="options" v-model="selectedValues" :selected-values="selectedValues" :multiple="true" width="350" track-by="name" label="label"></multi-select>
+    <multi-select :options="options" :selected-values="selectedValues" :multiple="true" width="350" track-by="name" label="label"></multi-select>
   </div>
 </template>
 

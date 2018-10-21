@@ -180,7 +180,7 @@ export default {
 		},
 		navOnLabel () {
 			// No navigation for single select..
-			exitIfNotMultipleSelect()
+			this.exitIfNotMultipleSelect()
 			// Naviate through label items on key up & down 
 			let getLabel = document.getElementById('labels')
 			if (event.keyCode == 38) {
@@ -210,7 +210,7 @@ export default {
 		},
 		enterPress () {
 			// No enter key press for single select..
-			exitIfNotMultipleSelect()
+			this.exitIfNotMultipleSelect()
 			// Select & Deselect Labels on keypress Enter  
 			if (event.keyCode == 13) {
 				var filteredCurrentOption = this.filteredOptions[this.currItem - 1]
