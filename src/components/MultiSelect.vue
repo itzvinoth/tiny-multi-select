@@ -12,16 +12,20 @@
                 </li>
             </ul>
         </div>
-        <div class="single-selection-container" v-if="!multiple">
+		<div class="single-selection-container" v-if="!multiple" @click="atSelectClick">
             {{ selectedValue.label }}
-        </div>
-		<ul v-show="showLabels" class="selection-labels" id="labels" :style="labelStyle">
+			<v-icon :name="iconName" :style="iconStyle"/>
+		</div>
+        <ul v-show="showLabels" class="selection-labels" id="labels" :style="labelStyle">
             <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :key="data.name" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data.label }} </li>
         </ul>
     </div>
 </template>
 
 <script>
+import Icon from 'vue-awesome/components/Icon'
+import 'vue-awesome/icons/sort-up'
+import 'vue-awesome/icons/sort-down'
 export default {
 	name: 'MultiSelect',
 	data() {
@@ -31,7 +35,11 @@ export default {
 			currItem: 1,
 			divHeight: 0,
 			selectedValue: this.sValue,
+			iconName: "sort-down"
 		}
+	},
+	components: {
+		'v-icon': Icon
 	},
 	props: {
 		options: {
@@ -102,9 +110,14 @@ export default {
 				this.showLabels = false
 			}
 		},
+		atSelectClick () {
+			this.iconName = 'sort-up'
+			this.showLabels = true
+		},
 		keyMonitor (event) {
-			if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 97 && event.keyCode <= 122) || (event.keyCode == 8)) {
-				if (this.keywords.length <= 0 && event.keyCode == 8 && this.selectedValues.length > 0) {
+			let evtkey = event.keyCode
+			if ((evtkey >= 48 && evtkey <= 57) || (evtkey >= 65 && evtkey <= 90) || (evtkey >= 97 && evtkey <= 122) || (evtkey == 8)) {
+				if (this.keywords.length <= 0 && evtkey == 8 && this.selectedValues.length > 0) {
 					for (var key in this.filteredOptions) {
 						if (this.filteredOptions[key][this.trackBy].indexOf(this.selectedValues[this.selectedValues.length -1][this.trackBy]) > -1) {
 							this.selectedValues.splice((this.selectedValues.length-1), 1)
@@ -159,7 +172,10 @@ export default {
 				})
 			} else {
 				data.selected = true
-				// this.sValue = []
+				this.$nextTick(() => {
+					this.showLabels = false
+				})
+				this.iconName = 'sort-down'
 				this.filteredOptions.forEach(item => {
 					if (item.name == data.name) {
 						let sValue = {}
@@ -173,14 +189,11 @@ export default {
 				})
 			}
 		},
-		exitIfNotMultipleSelect () {
+		navOnLabel () {
+			// No navigation for single select..
 			if (!this.multiple) {
 				return
 			}
-		},
-		navOnLabel () {
-			// No navigation for single select..
-			this.exitIfNotMultipleSelect()
 			// Naviate through label items on key up & down 
 			let getLabel = document.getElementById('labels')
 			if (event.keyCode == 38) {
@@ -210,7 +223,9 @@ export default {
 		},
 		enterPress () {
 			// No enter key press for single select..
-			this.exitIfNotMultipleSelect()
+			if (!this.multiple) {
+				return
+			}
 			// Select & Deselect Labels on keypress Enter  
 			if (event.keyCode == 13) {
 				var filteredCurrentOption = this.filteredOptions[this.currItem - 1]
@@ -242,6 +257,9 @@ export default {
 		},
 		inputStyle () {
 			return { height: this.divHeight+'px' }
+		},
+		iconStyle () {
+			return { left: '350px', position: 'absolute', top: (this.showLabels) ? '22px' : '18px' }
 		},
 		labelStyle () {
 			return { position: 'absolute', width: (this.width !== undefined ? this.width+'px': '300px') }
