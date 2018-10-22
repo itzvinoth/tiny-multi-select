@@ -35,7 +35,7 @@ export default {
 			currItem: 1,
 			divHeight: 0,
 			selectedValue: this.sValue,
-			iconName: "sort-down"
+			iconName: 'sort-down'
 		}
 	},
 	components: {
@@ -108,6 +108,7 @@ export default {
 				this.showLabels = true
 			} else {
 				this.showLabels = false
+				this.iconName = 'sort-down'
 			}
 		},
 		atSelectClick () {
@@ -129,7 +130,6 @@ export default {
 				this.$nextTick(() => {
 					this.keywords = event.target.value
 					this.currItem = 1
-						
 				})
 			}
 		},
