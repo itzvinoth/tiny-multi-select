@@ -117,11 +117,12 @@ export default {
 		},
 		keyMonitor (event) {
 			let evtkey = event.keyCode
+			let valLength = this.selectedValues.length
 			if ((evtkey >= 48 && evtkey <= 57) || (evtkey >= 65 && evtkey <= 90) || (evtkey >= 97 && evtkey <= 122) || (evtkey == 8)) {
-				if (this.keywords.length <= 0 && evtkey == 8 && this.selectedValues.length > 0) {
+				if (this.keywords.length <= 0 && evtkey == 8 && valLength > 0) {
 					for (var key in this.filteredOptions) {
-						if (this.filteredOptions[key][this.trackBy].indexOf(this.selectedValues[this.selectedValues.length -1][this.trackBy]) > -1) {
-							this.selectedValues.splice((this.selectedValues.length-1), 1)
+						if (this.filteredOptions[key][this.trackBy].indexOf(this.selectedValues[valLength -1][this.trackBy]) > -1) {
+							this.selectedValues.splice((valLength-1), 1)
 							this.filteredOptions[key].selected = !this.filteredOptions[key].selected
 							break
 						}
