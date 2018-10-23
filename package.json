@@ -1,6 +1,6 @@
 {
   "name": "tiny-multi-select",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A Vue.js component with simple multi select",
   "author": "htoniv <vinoth.vinothrenga@gmail.com>",
   "private": false,
