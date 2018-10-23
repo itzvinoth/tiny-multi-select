@@ -10,6 +10,9 @@ Find the npm package [`link`](https://www.npmjs.com/package/tiny-multi-select)
 $ npm install tiny-multi-select
 ```
 
+### Demo
+Find the working [demo](https://codesandbox.io/s/xv1wv3mqoo).
+
 ### For single select
 ```
 <template>
