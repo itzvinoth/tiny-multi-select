@@ -12,12 +12,12 @@
                 </li>
             </ul>
         </div>
-		<div class="single-selection-container" v-if="!multiple" @click="atSelectClick">
+		<div class="single-selection-container" v-if="!multiple" @click="onDropdownChange">
             {{ selectedValue.label }}
 			<v-icon :name="iconName" :style="iconStyle"/>
 		</div>
         <ul v-show="showLabels" class="selection-labels" id="labels" :style="labelStyle">
-            <li class="selection-choice" @keyup="navOnLabel" @keypress="enterPress" v-for="(data, index) in filteredOptions" :key="data.name" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data.label }} </li>
+            <li class="selection-choice" @keyup="navOnLabel" @keypress="onEnterPress" v-for="(data, index) in filteredOptions" :key="data.name" :class="{navColor: data.navigate, selected: data.selected}" @click="onLabelClick(data, index)"> {{ data.label }} </li>
         </ul>
     </div>
 </template>
@@ -94,12 +94,12 @@ export default {
 	},
 	mounted () {
 		document.addEventListener("keyup", this.navOnLabel)
-		document.addEventListener("keypress", this.enterPress)
+		document.addEventListener("keypress", this.onEnterPress)
 		window.addEventListener("click", this.checkElement)
 	},
 	destroyed () {
 		document.removeEventListener("keyup", this.navOnLabel)
-		document.removeEventListener("keypress", this.enterPress)
+		document.removeEventListener("keypress", this.onEnterPress)
 		window.removeEventListener("click", this.checkElement)
 	},
 	methods: {
@@ -111,7 +111,7 @@ export default {
 				this.iconName = 'sort-down'
 			}
 		},
-		atSelectClick () {
+		onDropdownChange () {
 			this.iconName = 'sort-up'
 			this.showLabels = true
 		},
@@ -222,7 +222,7 @@ export default {
 				}
 			})
 		},
-		enterPress () {
+		onEnterPress () {
 			// No enter key press for single select..
 			if (!this.multiple) {
 				return
@@ -260,7 +260,7 @@ export default {
 			return { height: this.divHeight+'px' }
 		},
 		iconStyle () {
-			return { left: '350px', position: 'absolute', top: (this.showLabels) ? '22px' : '18px' }
+			return { left: '335px', position: 'absolute', top: (this.showLabels) ? '18px' : '10px' }
 		},
 		labelStyle () {
 			return { position: 'absolute', width: (this.width !== undefined ? this.width+'px': '300px') }
@@ -281,6 +281,7 @@ export default {
   line-height: 40px;
   padding-left: 10px;
   color: #827e7e;
+  position: relative;
 }
 #inputDivSS {
   border: 1px solid #CCC;
